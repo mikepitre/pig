@@ -1,9 +1,10 @@
-require_relative './player'
+require_relative 'player'
+require_relative 'leaderboard.rb'
 
 class Pig
   def initialize
     @players   = []
-    @max_score = 100
+    @max_score = 10
   end
 
   def get_players
@@ -15,6 +16,11 @@ class Pig
         return
       else
         @players.push Player.new(input)
+        result = Leaderboard.find_or_create_by(name: input)
+        if result.win == nil
+          result.win.to_i
+          result.loss.to_i
+        end
       end
     end
   end
@@ -38,6 +44,9 @@ class Pig
   def winner
     if @players.length == 1
       @players.first
+      win_record = Leaderboard.where(name: @players.first.name ).first
+      win_record.win = win_record.win + 1
+      win_record.save
     end
   end
 
