@@ -47,6 +47,7 @@ class Pig
       win_record = Leaderboard.where(name: @players.first.name ).first
       win_record.win = win_record.win + 1
       win_record.save
+      @players.first.name
     end
   end
 
